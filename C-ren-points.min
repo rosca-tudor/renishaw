@@ -1,0 +1,81 @@
+editing
+(MASURARE punct PARAMETRICA)
+(POZITIONARE MANUAL LA Z5 X0 Y0)
+(-+- Parametrii)
+PDE=50 (RAZA CERC EXTERIOR)
+XXI=-3 (INITIAL)
+YYI=-3 (INITIAL)
+ZZ=-15 (Cora masurare)
+
+
+VPRT=15 (Scriere rezultate in D:\MD1\A.MDF)
+T100 M6
+G15 H1
+G56 HA Z20
+
+
+IF [VNCOM[3] EQ 0] GOTO N11
+M127 (Pornire RENISHAW)
+G4 F0.5
+N11
+M19
+(-+- Y MINUS)
+    VC11=XXI
+    X=VC11
+    Y=-PDE-2
+    Z=ZZ
+    CALL OY Q7 PP=-PDE
+    Z20
+
+(-+- X PLUS)
+    VC12=YYI
+    Y=VC12
+    X=PDE+2
+    Z=ZZ
+    CALL OX Q7 PP=PDE 
+    Z20
+
+(-+- Y PLUS)
+    VC11=XXI    
+    X=VC11
+    Y=PDE+2
+    Z=ZZ
+    CALL OY Q7 PP=PDE 
+    Z20
+
+(-+- X MINUS)
+    VC12=YYI
+    Y=VC12
+    Y=-PDE-2
+    Z=ZZ
+    CALL OX Q7 PP=-PDE
+    Z20
+
+
+M127
+M2
+
+OY (-+- Masurare Y)
+CALL OO10 PMOD=2 PEI=PP (POINT FACE)
+CALL OWRT VSX=VC11 VSY=VS28
+VC11=VC11+1
+G0 X=VC11
+RTS
+
+
+OX (-+- Masurare X)
+CALL OO10 PMOD=1 PEI=PP (POINT FACE)
+CALL OWRT VSX=VS29 VSY=VC12 
+YY=YY+1
+G0 Y=VC12
+RTS
+
+
+OWRT (scriitor)
+FWRITC MD1:B-REZULT.CSV;A
+PUT VSX
+PUT ','
+PUT VSY 
+WRITE C
+CLOSE C
+RTS
