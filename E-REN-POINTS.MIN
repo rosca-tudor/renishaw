@@ -1,5 +1,4 @@
-editing
-(masurare puncte pe cerc parametric)
+(MASURARE punct PARAMETRICA)
 (POZITIONARE MANUAL LA Z5 X0 Y0)
 (-+- Parametrii)
 PDE=50 (RAZA CERC EXTERIOR)
@@ -19,6 +18,8 @@ M127 (Pornire RENISHAW)
 G4 F0.5
 N11
 M19
+
+
 (-+- Y MINUS)
     VC11=XXI
     X=VC11
@@ -26,6 +27,7 @@ M19
     Z=ZZ
     CALL OY Q7 PP=-PDE
     Z20
+
 
 (-+- X PLUS)
     VC12=YYI
@@ -35,6 +37,7 @@ M19
     CALL OX Q7 PP=PDE 
     Z20
 
+
 (-+- Y PLUS)
     VC11=XXI    
     X=VC11
@@ -43,21 +46,23 @@ M19
     CALL OY Q7 PP=PDE 
     Z20
 
+
 (-+- X MINUS)
     VC12=YYI
     Y=VC12
-    Y=-PDE-2
+    X=-PDE-2
     Z=ZZ
     CALL OX Q7 PP=-PDE
     Z20
 
-
 M127
 M2
 
+
 OY (-+- Masurare Y)
 CALL OO10 PMOD=2 PEI=PP (POINT FACE)
-CALL OWRT VSX=VC11 VSY=VS28
+VC14=VS28
+CALL O1000 PSX=VC11 PSY=VC14
 VC11=VC11+1
 G0 X=VC11
 RTS
@@ -65,17 +70,20 @@ RTS
 
 OX (-+- Masurare X)
 CALL OO10 PMOD=1 PEI=PP (POINT FACE)
-CALL OWRT VSX=VS29 VSY=VC12 
-YY=YY+1
+VC13=VS29
+CALL O1000 PSX=VC13 PSY=VC12
+VC12=VC12+1
 G0 Y=VC12
 RTS
 
 
-OWRT (scriitor)
-FWRITC MD1:B-REZULT.CSV;A
-PUT VSX
+O1000 (scriitor)
+FWRITC MD1:E-REZULT.CSV;A
+PUT PSX
 PUT ','
-PUT VSY 
+PUT PSY 
 WRITE C
 CLOSE C
 RTS
+
+
